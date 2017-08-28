@@ -1,0 +1,27 @@
+{
+    "configuration": {
+        "status": "error",
+        "name": "JsonLogConfiguration",
+        "packages": "org.apache.logging.log4j.test",
+        "ThresholdFilter": {
+            "level": "debug"
+        },
+        "appenders": {
+            "Console": {
+                "name": "STDOUT",
+                "JSONLayout": {
+                    "eventEol": true,
+                    "compact": true
+                }
+            }
+        },
+        "loggers": {
+            "root": {
+                "level": "info",
+                "AppenderRef": {
+                    "ref": "STDOUT"
+                }
+            }
+        }
+    }
+}

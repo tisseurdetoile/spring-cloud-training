@@ -1,0 +1,29 @@
+version: '2'
+
+services:
+  mongo:
+    image: mongo:3.4.2
+    volumes:
+      - 'mongo-data:/data/db'
+      - 'mongo-config:/data/configdb'
+  redis:
+    image: redis:4.0.1-alpine
+    volumes:
+      - 'redis-data:/data'
+  catalog:
+    image: example/catalog:${EXAMPLE_VERSION}
+    environment:
+      - SPRING_DATA_MONGODB_HOST=mongo
+  order:
+    image: example/order:${EXAMPLE_VERSION}
+    environment:
+      - SPRING_DATA_MONGODB_HOST=mongo
+  notification:
+    image: example/notification:${EXAMPLE_VERSION}
+    environment:
+      - SPRING_REDIS_HOST=redis
+
+volumes:
+  mongo-data:
+  mongo-config:
+  redis-data:
