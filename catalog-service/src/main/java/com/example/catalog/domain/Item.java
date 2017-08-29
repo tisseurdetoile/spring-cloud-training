@@ -8,7 +8,24 @@ public class Item {
 	private String description;
 	
 	private double price;
-	
+
+	public Item(String name, String description, double price) {
+		this.name = name;
+		this.description = description;
+		this.price = price;
+	}
+
+	public Item(String id, String name, String description, double price) {
+		this.id = id;
+		this.name = name;
+		this.description = description;
+		this.price = price;
+	}
+
+	public Item(){
+
+	}
+
 	private Item(Builder builder) {
 		this.name = builder.name;
 		this.description = builder.description;

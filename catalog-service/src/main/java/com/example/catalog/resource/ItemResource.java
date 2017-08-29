@@ -5,6 +5,7 @@ import org.springframework.hateoas.core.Relation;
 
 import com.example.catalog.domain.Item;
 
+
 @Relation(value = "item", collectionRelation = "items")
 public class ItemResource extends ResourceSupport {
 	private String name;

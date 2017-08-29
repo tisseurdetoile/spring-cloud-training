@@ -16,7 +16,27 @@ public class Order {
 	private LocalDateTime paidAt;
 	
 	private LocalDateTime shippedAt;
-	
+
+//
+//	private Order(Builder builder) {
+//		this.items = builder.items;
+//		this.state = builder.state;
+//		this.paidAt = builder.paidAt;
+//		this.shippedAt = builder.shippedAt;
+//	}
+
+
+	public Order(String id, Map<String, Item> items, OrderState state, LocalDateTime paidAt, LocalDateTime shippedAt) {
+		this.id = id;
+		this.items = items;
+		this.state = state;
+		this.paidAt = paidAt;
+		this.shippedAt = shippedAt;
+	}
+
+	public Order() {
+
+	}
 	public String getId() {
 		return id;
 	}
@@ -25,10 +45,18 @@ public class Order {
 		this.id = id;
 	}
 	
-	public Collection<Item> getItems() {
-		return items.values();
+//	public Collection<Item> getItems() {
+//		return items.values();
+//	}
+
+	public Map<String, Item> getItems() {
+		return this.items;
 	}
-	
+
+	public void setItems(Map<String, Item> items) {
+		this.items = items;
+	}
+
 	public void addItem(Item item) {
 		String id = item.getId();
 		
@@ -46,7 +74,23 @@ public class Order {
 	public LocalDateTime getShippedAt() {
 		return shippedAt;
 	}
-	
+
+	public OrderState getState() {
+		return state;
+	}
+
+	public void setState(OrderState state) {
+		this.state = state;
+	}
+
+	public void setPaidAt(LocalDateTime paidAt) {
+		this.paidAt = paidAt;
+	}
+
+	public void setShippedAt(LocalDateTime shippedAt) {
+		this.shippedAt = shippedAt;
+	}
+
 	public void pay() {
 		Assert.state(canPay(), "This order has already been paid");
 		
@@ -68,4 +112,6 @@ public class Order {
 	public boolean canShip() {
 		return state == OrderState.SHIPPED;
 	}
+
+
 }

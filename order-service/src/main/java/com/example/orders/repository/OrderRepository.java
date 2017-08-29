@@ -8,7 +8,7 @@ import org.springframework.data.repository.Repository;
 import com.example.orders.domain.Order;
 
 public interface OrderRepository extends Repository<Order, String> {
-	Optional<Order> find(String id);
+	Optional<Order> findOne(String id);
 	List<Order> findAll();
 
 	Order save(Order order);

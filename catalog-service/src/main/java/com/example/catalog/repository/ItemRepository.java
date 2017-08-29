@@ -9,7 +9,7 @@ import com.example.catalog.domain.Item;
 
 public interface ItemRepository extends Repository<Item, String> {
 	List<Item> findAll();
-	Optional<Item> find(String id);
+	Optional<Item> findOne(String id);
 	
 	Item save(Item item);
 	
