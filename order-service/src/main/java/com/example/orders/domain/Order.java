@@ -2,8 +2,10 @@ package com.example.orders.domain;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 import org.springframework.util.Assert;
 
@@ -17,26 +19,8 @@ public class Order {
 	
 	private LocalDateTime shippedAt;
 
-//
-//	private Order(Builder builder) {
-//		this.items = builder.items;
-//		this.state = builder.state;
-//		this.paidAt = builder.paidAt;
-//		this.shippedAt = builder.shippedAt;
-//	}
-
-
-	public Order(String id, Map<String, Item> items, OrderState state, LocalDateTime paidAt, LocalDateTime shippedAt) {
-		this.id = id;
-		this.items = items;
-		this.state = state;
-		this.paidAt = paidAt;
-		this.shippedAt = shippedAt;
-	}
-
-	public Order() {
-
-	}
+	public Order() {}
+	
 	public String getId() {
 		return id;
 	}
@@ -45,18 +29,10 @@ public class Order {
 		this.id = id;
 	}
 	
-//	public Collection<Item> getItems() {
-//		return items.values();
-//	}
-
-	public Map<String, Item> getItems() {
-		return this.items;
+	public Collection<Item> getItems() {
+		return Collections.unmodifiableCollection(items.values());
 	}
-
-	public void setItems(Map<String, Item> items) {
-		this.items = items;
-	}
-
+	
 	public void addItem(Item item) {
 		String id = item.getId();
 		
@@ -113,5 +89,7 @@ public class Order {
 		return state == OrderState.SHIPPED;
 	}
 
-
+	public Optional<Item> getItem(String itemId) {
+		return Optional.ofNullable(items.get(itemId));
+	}
 }

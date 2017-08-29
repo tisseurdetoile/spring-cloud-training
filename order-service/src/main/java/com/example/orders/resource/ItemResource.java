@@ -6,8 +6,6 @@ import org.springframework.hateoas.core.Relation;
 
 @Relation(value = "item", collectionRelation = "items")
 public class ItemResource extends ResourceSupport {
-    private String id;
-
     private String name;
 
     private String description;

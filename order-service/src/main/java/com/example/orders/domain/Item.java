@@ -14,22 +14,11 @@ public class Item {
 		this.quantity = builder.quantity;
 	}
 
-	public Item() {
-
-	}
-
-	public Item(String id, String name, String description, int quantity, double price) {
-		this.id = id;
-		this.name = name;
-		this.description = description;
-		this.quantity = quantity;
-		this.price = price;
-	}
+	public Item() { }
 
 	public static Builder of(String name) {
 		return new Builder(name);
 	}
-
 
 
 	public String getId() {
