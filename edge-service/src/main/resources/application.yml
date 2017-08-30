@@ -12,15 +12,24 @@ zuul:
 catalog-service:
   ribbon:
     eureka:
-      enabled: false
-  listOfServers: localhost:8081, localhost:8083
+      enabled: true
 
 order-service:
   ribbon:
     eureka:
-      enabled: false
-  listOfServers: localhost:8082
+      enabled: true
 
 management:
   security:
     enabled: false
+
+spring:
+  application:
+    name: edge-service
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: ${EUREKA_URI:http://localhost:8761/eureka}
+  instance:
+    preferIpAddress: true

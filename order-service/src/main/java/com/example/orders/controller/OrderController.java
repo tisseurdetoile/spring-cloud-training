@@ -125,7 +125,7 @@ public class OrderController {
     @PostMapping("/{id}/items")
     public ResponseEntity<?> addItem(@PathVariable String id, @Valid @RequestBody ItemResource request) {
         return withOrder(id, order -> {
-            boolean isNewItem = !hasItem(order,request.getName()); 
+            boolean isNewItem = !hasItem(order,request.getName());
             Item item = order.addItem(request.toItem());
             order = orderRepository.save(order);
             ItemResource itemResource = toResource(order, item);
