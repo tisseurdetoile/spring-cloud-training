@@ -1,7 +1,6 @@
 package com.example.orders.domain;
 
 public class Item {
-	private String id;
 	private String name;
 	private String description;
 	private int quantity;
@@ -21,13 +20,6 @@ public class Item {
 	}
 
 
-	public String getId() {
-		return id;
-	}
-	
-	public void setId(String id) {
-		this.id = id;
-	}
 	
 	public String getName() {
 		return name;

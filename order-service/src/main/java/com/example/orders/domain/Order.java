@@ -12,35 +12,48 @@ import org.springframework.util.Assert;
 public class Order {
 	private String id;
 	private Map<String, Item> items = new HashMap<>();
-	
+
 	private OrderState state = OrderState.CART;
-	
+
 	private LocalDateTime paidAt;
-	
+
 	private LocalDateTime shippedAt;
 
 	public Order() {}
-	
+
 	public String getId() {
 		return id;
 	}
-	
+
 	protected void setId(String id) {
 		this.id = id;
 	}
-	
+
 	public Collection<Item> getItems() {
 		return Collections.unmodifiableCollection(items.values());
 	}
-	
-	public void addItem(Item item) {
-		String id = item.getId();
-		
-		if (items.containsKey(id)) {
-			items.get(id).addQuantity(item.getQuantity());
+
+	public Item addItem(Item item) {
+		String name = item.getName();
+
+		if (items.containsKey(name)) {
+			Item result = items.get(name);
+			result.addQuantity(item.getQuantity());
+			return result;
+
 		} else {
-			items.put(id, item);
+			items.put(name, item);
+			return item;
 		}
+	}
+
+	public void removeItem(Item item) {
+		String name = item.getName();
+
+		if(items.containsKey(name)) {
+			items.remove(name);
+		}
+
 	}
 	
 	public LocalDateTime getPaidAt() {
@@ -89,7 +102,7 @@ public class Order {
 		return state == OrderState.SHIPPED;
 	}
 
-	public Optional<Item> getItem(String itemId) {
-		return Optional.ofNullable(items.get(itemId));
+	public Optional<Item> getItem(String itemName) {
+		return Optional.ofNullable(items.get(itemName));
 	}
 }

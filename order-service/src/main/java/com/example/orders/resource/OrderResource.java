@@ -12,7 +12,6 @@ import com.example.orders.domain.Order;
 import com.example.orders.domain.OrderState;
 
 public class OrderResource  extends ResourceSupport {
-    private List<Item> items = new ArrayList<>();
 
     private OrderState state = OrderState.CART;
 
@@ -23,19 +22,11 @@ public class OrderResource  extends ResourceSupport {
     public OrderResource() {}
     
     public OrderResource(Order order) {
-        this.items = new ArrayList<>(order.getItems());
         this.state = order.getState();
         this.paidAt = order.getPaidAt();
         this.shippedAt = order.getShippedAt();
     }
 
-    public List<Item> getItems() {
-		return items;
-	}
-    
-    public void setItems(List<Item> items) {
-		this.items = items;
-	}
 
     public OrderState getState() {
         return state;
