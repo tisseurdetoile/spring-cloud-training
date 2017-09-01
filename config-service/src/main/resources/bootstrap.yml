@@ -1,3 +1,7 @@
+management:
+  security:
+    enabled: false
+
 server:
   port: 8888
 spring:
@@ -8,4 +12,6 @@ spring:
       server:
         git:
           uri: https://github.com/Treeptik/spring-cloud-training-config
+
+
 

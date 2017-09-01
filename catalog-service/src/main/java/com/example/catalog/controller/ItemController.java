@@ -53,7 +53,8 @@ public class ItemController {
 		Item item = itemRepository.save(request.toItem());
 		
 		ItemResource resource = toResource(item);
-		
+
+
 		return ResponseEntity.created(URI.create(resource.getId().getHref()))
 				.body(resource);
 	}

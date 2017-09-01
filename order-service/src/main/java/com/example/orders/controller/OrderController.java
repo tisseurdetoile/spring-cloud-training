@@ -11,6 +11,7 @@ import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
+import com.example.orders.ItemNotificationClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.Resources;
 import org.springframework.http.ResponseEntity;
@@ -35,6 +36,9 @@ public class OrderController {
 
     @Autowired
     private OrderRepository orderRepository;
+
+    @Autowired
+    private ItemNotificationClient itemNotificationClient;
 
     private OrderResource toResource(Order order) {
         OrderResource resource = new OrderResource(order);
@@ -85,6 +89,7 @@ public class OrderController {
     public ResponseEntity<?> create() {
         Order order = orderRepository.save(new Order());
 
+        itemNotificationClient.sendNotification("Yolo !");
         OrderResource resource = toResource(order);
 
         return ResponseEntity.created(URI.create(resource.getId().getHref()))
