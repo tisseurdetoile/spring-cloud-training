@@ -2,12 +2,9 @@ package com.example.orders.resource;
 
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 import org.springframework.hateoas.ResourceSupport;
 
-import com.example.orders.domain.Item;
 import com.example.orders.domain.Order;
 import com.example.orders.domain.OrderState;
 

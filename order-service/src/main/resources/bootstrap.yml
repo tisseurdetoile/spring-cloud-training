@@ -1,9 +1,6 @@
-server:
-  port: 8080
-
 spring:
   application:
-    name: edge
+    name: order
   cloud:
     config:
       uri: http://localhost:8888
