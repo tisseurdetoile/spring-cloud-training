@@ -12,6 +12,3 @@ spring:
       server:
         git:
           uri: https://github.com/Treeptik/spring-cloud-training-config
-
-
-
