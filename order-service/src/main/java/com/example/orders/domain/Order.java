@@ -33,6 +33,10 @@ public class Order {
 		return Collections.unmodifiableCollection(items.values());
 	}
 
+	public boolean hasItem(String name) {
+		return items.containsKey(name);
+	}
+	
 	public Item addItem(Item item) {
 		String name = item.getName();
 
@@ -105,4 +109,5 @@ public class Order {
 	public Optional<Item> getItem(String itemName) {
 		return Optional.ofNullable(items.get(itemName));
 	}
+
 }

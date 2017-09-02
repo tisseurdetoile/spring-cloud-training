@@ -11,9 +11,9 @@ import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
-import com.example.orders.ItemNotificationClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.Resources;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -24,11 +24,13 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.example.orders.NotificationClient;
 import com.example.orders.domain.Item;
 import com.example.orders.domain.Order;
 import com.example.orders.repository.OrderRepository;
 import com.example.orders.resource.ItemResource;
 import com.example.orders.resource.OrderResource;
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 
 @Controller
 @RequestMapping("/orders")
@@ -38,7 +40,7 @@ public class OrderController {
     private OrderRepository orderRepository;
 
     @Autowired
-    private ItemNotificationClient itemNotificationClient;
+    private NotificationClient itemNotificationClient;
 
     private OrderResource toResource(Order order) {
         OrderResource resource = new OrderResource(order);
@@ -79,12 +81,6 @@ public class OrderController {
         return resources;
     }
 
-
-    private boolean hasItem(Order order, String itemName) {
-        return order.getItem(itemName).isPresent();
-    }
-
-
     @PostMapping
     public ResponseEntity<?> create() {
         Order order = orderRepository.save(new Order());
@@ -97,6 +93,7 @@ public class OrderController {
     }
 
     @GetMapping
+    @HystrixCommand(fallbackMethod = "serverError", ignoreExceptions = { NullPointerException.class })
     public ResponseEntity<?> findAll() {
         List<Order> orders = orderRepository.findAll();
 
@@ -110,6 +107,16 @@ public class OrderController {
         });
     }
     
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> remove(@PathVariable String id, @Valid @RequestBody ItemResource request) {
+        return withOrder(id, order -> {
+            order.removeItem(request.toItem());
+            order = orderRepository.save(order);
+
+            return ResponseEntity.noContent().build();
+        });
+    }
+
     @PostMapping("/{id}/pay")
     public ResponseEntity<?> edit(@PathVariable String id) {
     	return withOrder(id, order -> {
@@ -123,18 +130,16 @@ public class OrderController {
     	});
     }
 
-
     @GetMapping("/{id}/items")
     public ResponseEntity<?> getItems(@PathVariable String id) {
         Order order =  orderRepository.findOne(id).get();
         return ResponseEntity.ok(toResources(order, order.getItems()));
     }
 
-
     @PostMapping("/{id}/items")
     public ResponseEntity<?> addItem(@PathVariable String id, @Valid @RequestBody ItemResource request) {
         return withOrder(id, order -> {
-            boolean isNewItem = !hasItem(order,request.getName());
+            boolean isNewItem = order.hasItem(request.getName());
             Item item = order.addItem(request.toItem());
             order = orderRepository.save(order);
             ItemResource itemResource = toResource(order, item);
@@ -146,16 +151,6 @@ public class OrderController {
 
             return ResponseEntity.ok(toResource(order, item));
 
-        });
-    }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<?> remove(@PathVariable String id, @Valid @RequestBody ItemResource request) {
-        return withOrder(id, order -> {
-            order.removeItem(request.toItem());
-            order = orderRepository.save(order);
-
-            return ResponseEntity.noContent().build();
         });
     }
 
@@ -188,9 +183,6 @@ public class OrderController {
         });
     }
 
-
-
-
     private ResponseEntity<?> withOrderItem(String id, String itemName, BiFunction<Order, Item, ResponseEntity<?>> mapper) {
 		return orderRepository.findOne(id)
 				.flatMap(order -> order.getItem(itemName)
@@ -203,5 +195,9 @@ public class OrderController {
                 .map(mapper)
                 .orElse(ResponseEntity.notFound().build());
     }
+	
+	protected ResponseEntity<?> serverError() {
+		return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).build();
+	}
 
 }
