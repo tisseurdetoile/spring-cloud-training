@@ -12,47 +12,83 @@ services:
       - 'redis-data:/data'
   config:
     image: example/config:${EXAMPLE_VERSION}
+    environment:
+      - SPRING_MAIN_BANNER-MODE=off
+    logging:
+      driver: gelf
+      options:
+        gelf-address: udp://localhost:12201
   eureka:
     image: example/eureka:${EXAMPLE_VERSION}
     ports: [ '8761:8761' ]
-    depends_on:
-      - config
     environment:
+      - SPRING_MAIN_BANNER-MODE=off
       - SPRING_CLOUD_CONFIG_URI=http://config:8888
   edge:
     image: example/edge:${EXAMPLE_VERSION}
     ports: [ '8080:8080' ]
-    depends_on:
-      - config
     environment:
+      - SPRING_MAIN_BANNER-MODE=off
       - SPRING_CLOUD_CONFIG_URI=http://config:8888
       - EUREKA_URI=http://eureka:8761/eureka
+    logging:
+      driver: gelf
+      options:
+        gelf-address: udp://localhost:12201
   catalog:
     image: example/catalog:${EXAMPLE_VERSION}
-    depends_on:
-      - config
     environment:
+      - SPRING_MAIN_BANNER-MODE=off
       - SPRING_CLOUD_CONFIG_URI=http://config:8888
       - EUREKA_URI=http://eureka:8761/eureka
       - SPRING_DATA_MONGODB_HOST=mongo
+    logging:
+      driver: gelf
+      options:
+        gelf-address: udp://localhost:12201
   order:
     image: example/order:${EXAMPLE_VERSION}
-    depends_on:
-      - config
     environment:
+      - SPRING_MAIN_BANNER-MODE=off
       - SPRING_CLOUD_CONFIG_URI=http://config:8888
       - EUREKA_URI=http://eureka:8761/eureka
       - SPRING_DATA_MONGODB_HOST=mongo
+    logging:
+      driver: gelf
+      options:
+        gelf-address: udp://localhost:12201
   notification:
     image: example/notification:${EXAMPLE_VERSION}
-    depends_on:
-      - config
     environment:
+      - SPRING_MAIN_BANNER-MODE=off
       - SPRING_CLOUD_CONFIG_URI=http://config:8888
       - EUREKA_URI=http://eureka:8761/eureka
       - SPRING_REDIS_HOST=redis
+    logging:
+      driver: gelf
+      options:
+        gelf-address: udp://localhost:12201
+  elastic:
+    image: docker.elastic.co/elasticsearch/elasticsearch:5.5.2
+    volumes:
+      - 'es-data:/usr/share/elasticsearch/data'
+  logstash:
+    image: docker.elastic.co/logstash/logstash:5.5.2
+    ports: [ '12201:12201/udp' ]
+    environment:
+      - ELASTICSEARCH_URL=http://elastic:9200
+      - XPACK_MONITORING_ENABLED=false
+    volumes:
+      - './logstash.conf:/usr/share/logstash/pipeline/logstash.conf'
+  kibana:
+    image: docker.elastic.co/kibana/kibana:5.5.2
+    ports: [ '5601:5601' ]
+    environment:
+      - ELASTICSEARCH_URL=http://elastic:9200
+      - XPACK_MONITORING_ENABLED=false
 
 volumes:
   mongo-data:
   mongo-config:
   redis-data:
+  es-data:
