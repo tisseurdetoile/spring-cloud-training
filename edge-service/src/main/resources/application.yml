@@ -1,0 +1,8 @@
+zuul:
+  routes:
+    catalog:
+      url: http://localhost:8180
+    notification:
+      url: http://localhost:8280
+    order:
+      url: http://localhost:8380
