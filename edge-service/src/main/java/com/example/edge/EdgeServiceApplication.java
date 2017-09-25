@@ -1,15 +1,16 @@
-package com.example.notification;
+package com.example.edge;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
-import org.springframework.data.redis.repository.configuration.EnableRedisRepositories;
+import org.springframework.cloud.netflix.zuul.EnableZuulProxy;
 
-@EnableRedisRepositories
+@EnableZuulProxy
 @EnableDiscoveryClient
 @SpringBootApplication
-public class NotificationServiceApplication {
+public class EdgeServiceApplication {
+
 	public static void main(String[] args) {
-		SpringApplication.run(NotificationServiceApplication.class, args);
+		SpringApplication.run(EdgeServiceApplication.class, args);
 	}
 }
