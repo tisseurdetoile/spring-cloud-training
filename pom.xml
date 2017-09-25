@@ -19,6 +19,7 @@
 	</parent>
 
 	<modules>
+		<module>config-service</module>
 		<module>eureka-service</module>
 		<module>edge-service</module>
 		<module>catalog-service</module>
