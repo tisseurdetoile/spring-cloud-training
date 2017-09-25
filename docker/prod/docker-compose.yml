@@ -68,6 +68,10 @@ services:
       driver: gelf
       options:
         gelf-address: udp://localhost:12201
+  metricbeat:
+    image: docker.elastic.co/beats/metricbeat:6.0.0-beta2
+    volumes:
+      - './metricbeat.yml:/usr/share/metricbeat/metricbeat.yml'
   elastic:
     image: docker.elastic.co/elasticsearch/elasticsearch:5.5.2
     volumes:
