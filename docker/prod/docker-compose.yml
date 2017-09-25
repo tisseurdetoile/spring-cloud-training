@@ -10,6 +10,9 @@ services:
     image: redis:4.0.1-alpine
     volumes:
       - 'redis-data:/data'
+  edge:
+    image: example/edge:${EXAMPLE_VERSION}
+    ports: [ '8080:8080' ]
   catalog:
     image: example/catalog:${EXAMPLE_VERSION}
     environment:
