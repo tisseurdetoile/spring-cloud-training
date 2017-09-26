@@ -1,0 +1,15 @@
+server:
+  port: 8080
+zuul:
+  routes:
+    catalog:
+      path: /items/**
+      url: http://localhost:8081
+      strip-prefix: false
+      sensitive-headers: X-TEST   
+    notification:
+      url: http://localhost:8082
+    order:
+      path: /orders/**
+      url: http://localhost:8083
+      strip-prefix: false
