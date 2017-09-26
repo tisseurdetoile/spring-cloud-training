@@ -63,7 +63,7 @@ public class ItemController {
 	public ResponseEntity<?> findAll() {
 		List<Item> items = itemRepository.findAll();
 		
-		return ResponseEntity.ok(toResources(items));
+		return ResponseEntity.ok().header("X-TEST", "1").body(toResources(items));
 	}
 	
 	@GetMapping("/{id}")

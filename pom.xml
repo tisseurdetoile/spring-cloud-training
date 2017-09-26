@@ -23,6 +23,7 @@
 		<module>order-service</module>
 		<module>notification-service</module>
 		<module>service-parent</module>
+		<module>edge-service</module>
 	</modules>
 
 	<properties>
@@ -105,6 +106,7 @@
 								<tag>${project.version}</tag>
 							</configuration>
 						</execution>
+						<!-- 
 						<execution>
 							<id>tag-git-branch</id>
 							<goals>
@@ -114,13 +116,14 @@
 								<tag>${project.version}-${git.branch}</tag>
 							</configuration>
 						</execution>
+						 -->
 						<execution>
 							<id>tag-git-commit</id>
 							<goals>
 								<goal>tag</goal>
 							</goals>
 							<configuration>
-								<tag>${project.version}-${git.branch}-${git.commit.id.abbrev}</tag>
+								<tag>${project.version}-${git.commit.id.abbrev}</tag>
 							</configuration>
 						</execution>
 					</executions>
