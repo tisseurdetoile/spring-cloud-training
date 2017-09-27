@@ -10,7 +10,9 @@ import java.util.stream.Collectors;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.hateoas.Resources;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -29,6 +31,9 @@ import com.example.catalog.resource.ItemResource;
 public class ItemController {
 	@Autowired
 	private ItemRepository itemRepository;
+	
+	@Value("${messageValue:nothigElseMatter}")
+	private String message;
 	
 	private ItemResource toResource(Item item) {
 		ItemResource resource = new ItemResource(item);
@@ -82,6 +87,12 @@ public class ItemController {
 			item = itemRepository.save(item);
 			return ResponseEntity.ok(toResource(item));
 		});
+	}
+	
+	@PutMapping("/test")
+	public ResponseEntity<String> test() {
+		return ResponseEntity.ok().body(message);
+		
 	}
 	
 	private ResponseEntity<?> withItem(String id, Function<Item, ResponseEntity<?>> mapper) {
