@@ -36,6 +36,9 @@ public class OrderController {
 
     @Autowired
     private OrderRepository orderRepository;
+    
+    @Autowired
+    private NotificationClient notificationClient;
 
     private OrderResource toResource(Order order) {
         OrderResource resource = new OrderResource(order);
@@ -82,6 +85,8 @@ public class OrderController {
 
         OrderResource resource = toResource(order);
 
+        
+        notificationClient.sendNotification("creation du order id = " + order.getId());
         return ResponseEntity.created(URI.create(resource.getId().getHref()))
                 .body(resource);
     }
