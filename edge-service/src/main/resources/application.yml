@@ -12,9 +12,8 @@ zuul:
     catalog:
       path: /items/**
       service-id: catalog
-      strip-prefix: false
-    notification:
-      service-id: notification             
+      strip-prefix: false 
+  ignored-services: notification 
 spring:
   application:
     name: edge
