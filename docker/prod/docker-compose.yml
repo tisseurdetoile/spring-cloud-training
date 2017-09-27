@@ -10,29 +10,38 @@ services:
     image: redis:4.0.1-alpine
     volumes:
       - 'redis-data:/data'
+  config:
+    image: example/config:${EXAMPLE_VERSION}
+    ports: [ '8888:8888' ]
   eureka:
     image: example/eureka:${EXAMPLE_VERSION}
     ports: [ '8761:8761' ]
+    environment:
+      - SPRING_CLOUD_CONFIG_URI=http://config:8888
   edge:
     image: example/edge:${EXAMPLE_VERSION}
     ports: [ '8080:8080' ]
     environment:
-      - EUREKA_URL=http://eureka:8761/eureka
+      - SPRING_CLOUD_CONFIG_URI=http://config:8888
+      - EUREKA_URI=http://eureka:8761/eureka
   catalog:
     image: example/catalog:${EXAMPLE_VERSION}
     environment:
       - SPRING_DATA_MONGODB_HOST=mongo
-      - EUREKA_URL=http://eureka:8761/eureka
+      - SPRING_CLOUD_CONFIG_URI=http://config:8888
+      - EUREKA_URI=http://eureka:8761/eureka
   order:
     image: example/order:${EXAMPLE_VERSION}
     environment:
       - SPRING_DATA_MONGODB_HOST=mongo
-      - EUREKA_URL=http://eureka:8761/eureka
+      - SPRING_CLOUD_CONFIG_URI=http://config:8888
+      - EUREKA_URI=http://eureka:8761/eureka
   notification:
     image: example/notification:${EXAMPLE_VERSION}
     environment:
       - SPRING_REDIS_HOST=redis
-      - EUREKA_URL=http://eureka:8761/eureka
+      - SPRING_CLOUD_CONFIG_URI=http://config:8888
+      - EUREKA_URI=http://eureka:8761/eureka
 
 volumes:
   mongo-data:
