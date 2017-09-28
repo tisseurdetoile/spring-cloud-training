@@ -11,6 +11,9 @@ import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.Resources;
 import org.springframework.http.HttpStatus;
@@ -35,6 +38,7 @@ import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 @Controller
 @RequestMapping("/orders")
 public class OrderController {
+	private static final Logger LOGGER = LoggerFactory.getLogger(OrderController.class);
 
     @Autowired
     private OrderRepository orderRepository;
@@ -84,6 +88,8 @@ public class OrderController {
     @PostMapping
     public ResponseEntity<?> create() {
         Order order = orderRepository.save(new Order());
+
+        LOGGER.info("Creating order {}", order.getId());
 
         itemNotificationClient.sendNotification("Yolo !");
         OrderResource resource = toResource(order);

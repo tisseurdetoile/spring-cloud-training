@@ -2,6 +2,8 @@ package com.example.notification.controller;
 
 import java.util.stream.Collectors;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.Resources;
 import org.springframework.http.ResponseEntity;
@@ -16,7 +18,9 @@ import com.example.notification.repository.NotificationRepository;
 
 @Controller
 @RequestMapping("/")
-public class NotificationController {
+public class NotificationController {	
+	private static final Logger LOGGER = LoggerFactory.getLogger(NotificationController.class);
+	
 	@Autowired
 	private NotificationRepository notificationRepository;
 	
@@ -29,6 +33,7 @@ public class NotificationController {
 	
 	@PostMapping
 	public ResponseEntity<?> sendNotification(@RequestBody String message) {
+		LOGGER.info("Received notification: {}", message);
 		notificationRepository.save(new Notification(message));
 		return ResponseEntity.noContent().build();
 	}
