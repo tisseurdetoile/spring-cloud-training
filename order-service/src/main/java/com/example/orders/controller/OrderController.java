@@ -12,6 +12,8 @@ import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.Resources;
 import org.springframework.http.ResponseEntity;
@@ -27,6 +29,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.example.orders.domain.Item;
 import com.example.orders.domain.Order;
 import com.example.orders.repository.OrderRepository;
+import com.example.orders.repository.QueuePublisher;
 import com.example.orders.resource.ItemResource;
 import com.example.orders.resource.OrderResource;
 
@@ -34,8 +37,13 @@ import com.example.orders.resource.OrderResource;
 @RequestMapping("/orders")
 public class OrderController {
 
+	private static Logger logger = LoggerFactory.getLogger(OrderController.class);
+	
     @Autowired
     private OrderRepository orderRepository;
+    
+    @Autowired
+    private QueuePublisher msgQueue;
     
     @Autowired
     private DirectNotificationClient notificationClient;
@@ -86,8 +94,16 @@ public class OrderController {
 
         OrderResource resource = toResource(order);
 
+        /**
+         * ICI les modification
+         */
         
-        notificationClient.sendNotification("creation du order id = " + order.getId());
+        String message = "creation du order id = " + order.getId();
+        
+        notificationClient.sendNotification(message);
+        msgQueue.publish(message);
+        logger.error(message);
+        
         return ResponseEntity.created(URI.create(resource.getId().getHref()))
                 .body(resource);
     }

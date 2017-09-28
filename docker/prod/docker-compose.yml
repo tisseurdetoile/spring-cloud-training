@@ -6,6 +6,10 @@ services:
     volumes:
       - 'mongo-data:/data/db'
       - 'mongo-config:/data/configdb'
+  rabitmq:
+    image: rabbitmq:3.6.8-alpine
+    volumes:
+      - 'rabitmq-data:/var/lib/rabbitmq'
   redis:
     image: redis:4.0.1-alpine
     volumes:
@@ -47,3 +51,4 @@ volumes:
   mongo-data:
   mongo-config:
   redis-data:
+  rabitmq-data:
