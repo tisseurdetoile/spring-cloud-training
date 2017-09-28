@@ -2,7 +2,9 @@ package com.example.orders;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.client.circuitbreaker.EnableCircuitBreaker;
 import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
+import org.springframework.cloud.netflix.feign.EnableFeignClients;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 import org.springframework.hateoas.config.EnableHypermediaSupport;
 import org.springframework.hateoas.config.EnableHypermediaSupport.HypermediaType;
@@ -11,6 +13,8 @@ import org.springframework.hateoas.config.EnableHypermediaSupport.HypermediaType
 @EnableHypermediaSupport(type = HypermediaType.HAL)
 @SpringBootApplication
 @EnableEurekaClient
+@EnableFeignClients
+@EnableCircuitBreaker
 public class OrderServiceApplication {
 
 	public static void main(String[] args) {

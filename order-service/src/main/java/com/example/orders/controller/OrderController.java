@@ -38,7 +38,8 @@ public class OrderController {
     private OrderRepository orderRepository;
     
     @Autowired
-    private NotificationClient notificationClient;
+    private DirectNotificationClient notificationClient;
+    
 
     private OrderResource toResource(Order order) {
         OrderResource resource = new OrderResource(order);

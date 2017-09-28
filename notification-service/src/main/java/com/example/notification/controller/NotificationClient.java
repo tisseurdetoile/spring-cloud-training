@@ -1,4 +1,4 @@
-package com.example.orders.controller;
+package com.example.notification.controller;
 
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.http.ResponseEntity;
