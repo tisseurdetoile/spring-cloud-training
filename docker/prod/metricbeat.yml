@@ -1,12 +1,15 @@
 metricbeat.modules:
-- module: dropwizard
-  metricsets: ["collector"]
+- module: http
+  metricsets: ["json"]
   period: 10s
   hosts: ["edge:8080", "catalog:8080", "order:8080", "notification:8080"]
-  metrics_path: /metrics
-  namespace: example
+  path: "/metrics"
+  namespace: "example"
+processors:
+- drop_fields:
+    fields: ["http.example.classes", "http.example.heap", "http.example.nonheap", "http.example.threads", "http.example.mem", "http.example.gauge.servo.hystrix.hystrixcommand.ribboncommand.order.99"]
 output.elasticsearch:
   hosts: ["elastic:9200"]
-  protocol: http
-  username: elastic
-  password: changeme
+  protocol: "http"
+  username: "elastic"
+  password: "changeme"
