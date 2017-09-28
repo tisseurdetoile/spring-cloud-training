@@ -1,6 +1,7 @@
 package com.example.orders.controller;
 
-import static org.springframework.hateoas.mvc.ControllerLinkBuilder.*;
+import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
+import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 
 import java.net.URI;
 import java.util.Collection;
@@ -13,7 +14,6 @@ import javax.validation.Valid;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.Resources;
 import org.springframework.http.HttpStatus;
@@ -99,7 +99,7 @@ public class OrderController {
     }
 
     @GetMapping
-    @HystrixCommand(fallbackMethod = "serverError", ignoreExceptions = { NullPointerException.class })
+    //@HystrixCommand(fallbackMethod = "serverError", ignoreExceptions = { NullPointerException.class })
     public ResponseEntity<?> findAll() {
         List<Order> orders = orderRepository.findAll();
 

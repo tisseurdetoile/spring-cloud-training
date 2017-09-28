@@ -4,6 +4,9 @@ spring:
   cloud:
     config:
       uri: http://localhost:8888
+  sleuth:
+    sampler:
+      percentage: 1.0
 feign:
   hystrix:
     enabled: true
