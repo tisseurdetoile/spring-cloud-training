@@ -1,6 +1,7 @@
 package com.example.orders.controller;
 
-import static org.springframework.hateoas.mvc.ControllerLinkBuilder.*;
+import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
+import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 
 import java.net.URI;
 import java.util.Collection;
@@ -11,6 +12,8 @@ import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.Resources;
 import org.springframework.http.HttpStatus;
@@ -35,6 +38,7 @@ import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 @Controller
 @RequestMapping("/orders")
 public class OrderController {
+	private static final Logger LOGGER = LoggerFactory.getLogger(OrderController.class);
 
     @Autowired
     private OrderRepository orderRepository;
@@ -85,6 +89,8 @@ public class OrderController {
     public ResponseEntity<?> create() {
         Order order = orderRepository.save(new Order());
 
+        LOGGER.info("Creating order {}", order.getId());
+
         itemNotificationClient.sendNotification("Yolo !");
         OrderResource resource = toResource(order);
 
@@ -93,7 +99,7 @@ public class OrderController {
     }
 
     @GetMapping
-    @HystrixCommand(fallbackMethod = "serverError", ignoreExceptions = { NullPointerException.class })
+    //@HystrixCommand(fallbackMethod = "serverError", ignoreExceptions = { NullPointerException.class })
     public ResponseEntity<?> findAll() {
         List<Order> orders = orderRepository.findAll();
 

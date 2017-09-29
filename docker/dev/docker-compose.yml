@@ -12,8 +12,25 @@ services:
     ports: [ '6379:6379' ]
     volumes:
       - 'redis-data:/data'
+  elastic:
+    image: docker.elastic.co/elasticsearch/elasticsearch:5.5.2
+    volumes:
+      - 'es-data:/usr/share/elasticsearch/data'
+  zipkin:
+    image: openzipkin/zipkin:2.0.1
+    ports: [ '9411:9411' ]
+    environment:
+      - STORAGE_TYPE=elasticsearch
+      - ES_HOSTS=http://elastic:9200
+      - ES_USERNAME=elastic
+      - ES_PASSWORD=changeme
+  zipkin-ui:
+    image: openzipkin/zipkin-ui:2.0.1
+    ports: [ '9412:80' ]
 
 volumes:
   mongo-data:
   mongo-config:
   redis-data:
+  es-data:
+
